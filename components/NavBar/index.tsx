@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import MobileMenu from './MobileMenu'
-import navLinks from '../../data/nav-links'
+import navLinks from '~/data/nav-links'
 
 function NavBar() {
   return (

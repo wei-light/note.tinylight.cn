@@ -1,7 +1,7 @@
 import 'uno.css'
 import '@unocss/reset/tailwind.css'
-import '../styles/globals.css'
-import LayoutWrapper from '../components/LayoutWrapper'
+import '~/styles/globals.css'
+import LayoutWrapper from '~/components/LayoutWrapper'
 
 import type { AppProps } from 'next/app'
 

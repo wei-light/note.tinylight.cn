@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { Transition } from '@headlessui/react'
 import ClientOnlyPortal from '../ClientOnlyPortal'
 import MobileMenuButton from './MobileMenuButton'
-import navLinks from '../../data/nav-links'
+import navLinks from '~/data/nav-links'
 
 function MobileMenu() {
   const [navShown, setNavShown] = useState(false)
