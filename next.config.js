@@ -4,8 +4,12 @@ const UnoCSS = require('@unocss/webpack').default
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
-  webpack: (config) => {
+  webpack: (config, { dev }) => {
     config.plugins.push(UnoCSS())
+
+    if (dev) {
+      config.cache = false
+    }
 
     return config
   },

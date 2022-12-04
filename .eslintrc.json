@@ -4,6 +4,9 @@
     "next/core-web-vitals"
   ],
   "rules": {
-    "no-console": "warn"
+    "no-console": "warn",
+    "@typescript-eslint/consistent-type-definitions": ["warn", "type"],
+    "import/order": "off",
+    "curly": ["warn", "all"]
   }
 }
