@@ -9,7 +9,7 @@ const PostsPage = ({ postsList }: InferGetServerSidePropsType<typeof getStaticPr
   return (
     <>
       <section className="relative flex items-center justify-center h-48">
-        <h2 className="text-center text-3xl text-zinc-900 sm:text-4xl">
+        <h2 className="text-center text-3xl text-neutral-600 sm:text-4xl">
           Posts
         </h2>
       </section>
@@ -17,12 +17,12 @@ const PostsPage = ({ postsList }: InferGetServerSidePropsType<typeof getStaticPr
         {postsList.map(({ slug, title, excerpt }) => (
           <article key={slug}>
             <Link href={`/article/${slug}`}>
-              <h3 className="text-xl text-zinc-700 transition-colors duration-300">
+              <h3 className="text-xl text-neutral-500 transition-colors duration-300 hover:text-primary">
                 {title}
               </h3>
             </Link>
             {excerpt
-              && <p className="mt-2 text-zinc-300 line-clamp-3">{excerpt}</p>
+              && <p className="mt-2 opacity-[0.35]">{excerpt}</p>
             }
           </article>
         ))}

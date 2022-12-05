@@ -1,4 +1,3 @@
-import '~/styles/tailwind.css'
 import '~/styles/globals.css'
 import LayoutWrapper from '~/components/LayoutWrapper'
 

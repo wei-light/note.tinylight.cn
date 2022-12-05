@@ -20,7 +20,7 @@ const MobileMenu = () => {
         >
           <Transition.Child
             as="nav"
-            className="px-6 py-2 bg-zinc-50"
+            className="px-6 py-2 bg-neutral-100"
             enter="transition-transform ease-in-out duration-300 transform"
             enterFrom="-translate-y-full"
             enterTo="translate-y-0"
@@ -28,7 +28,7 @@ const MobileMenu = () => {
             leaveFrom="translate-y-0"
             leaveTo="-translate-y-full"
           >
-            <ul className="flex flex-col divide-y divide-gray-100 text-black/50">
+            <ul className="flex flex-col divide-y divide-neutral-200 opacity-50">
               {navLinks.map(nav => (
                 <li key={nav.id}>
                   <Link href={nav.path} onClick={onToggleNav} className="flex items-center h-12">

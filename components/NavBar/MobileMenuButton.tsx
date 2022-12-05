@@ -16,18 +16,18 @@ const MobileMenuButton = ({ active, click }: Props) => (
     <span
       className={classNames(
         { '-rotate-90': active },
-        'w-1/2 bg-zinc-500 h-0.5 rounded-full origin-right transition-transform',
+        'w-1/2 bg-neutral-400 h-0.5 rounded-full origin-right transition-transform',
       )}
     />
     <span
       className={classNames(
-        'w-full bg-zinc-500 h-0.5 rounded-full transition-transform',
+        'w-full bg-neutral-400 h-0.5 rounded-full transition-transform',
       )}
     />
     <span
       className={classNames(
         { '-rotate-90': active },
-        'self-end w-1/2 bg-zinc-500 h-0.5 rounded-full origin-left transition-transform',
+        'self-end w-1/2 bg-neutral-400 h-0.5 rounded-full origin-left transition-transform',
       )}
     />
   </button>

@@ -1,6 +1,21 @@
 /* import external font */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
 
-:root {
-  --nav-height: 3rem;
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+@layer base {
+  :root {
+    --nav-height: 3rem;
+
+    --neutral-color-lightest: #fafafa;
+    --neutral-color-lighter: #f5f5f5;
+    --neutral-color-light: #e5e5e5;
+    --neutral-color-midst: #737373;
+    --neutral-color-heavy: #525252;
+    --neutral-color-heavier: #404040;
+    --neutral-color-heaviest: #262626;
+    --primary-color: #80b398;
+  }
 }
