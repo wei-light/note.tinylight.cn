@@ -7,6 +7,8 @@
     "no-console": "warn",
     "@typescript-eslint/consistent-type-definitions": ["warn", "type"],
     "import/order": "off",
-    "curly": ["warn", "all"]
+    "curly": ["warn", "all"],
+    "brace-style": "off",
+    "@typescript-eslint/brace-style": "off"
   }
 }

@@ -1,0 +1,276 @@
+---
+title: CSS 中的外边距合并
+date: 2022-12-05
+duration: 8min
+excerpt: 有关 CSS 外边距合并的一些细节知识，或许会让你有收获
+---
+
+外边距合并，相信你肯定遇到过这一问题。以前遇到该类问题时，我只能凭借记忆中那几种方案“迷迷糊糊”地解决。至于这些方案为什么能解决外边距合并的问题，在什么情况下会产生外边距合并，我并不了解，也认为没必要了解。直到最近，我遇到了一个问题，触发了 BFC 为什么能避免外边距合并？正因为不清楚外边距合并的本质，让我遇到了很多困难，所以不得不重新正视外边距合并这个问题。
+
+## 外边距合并的意义
+
+刚遇到这类问题时，相信大家肯定和我有同样的疑惑：外边距合并究竟有什么意义呢？
+CSS 1.0 规范给出了[解释](https://www.w3.org/TR/CSS1/#vertical-formatting)：
+
+> The width of the margin on non-floating block-level elements specifies the minimum distance to the edges of surrounding boxes. Two or more adjoining vertical margins (i.e., with no border, padding or content between them) are collapsed to use the maximum of the margin values. In most cases, after collapsing the vertical margins the result is visually more pleasing and closer to what the designer expects.
+
+可以看到，这是规范有意而为之的，它认为这样更能符合视觉上的体验，且更接近设计师的预期效果。
+
+但这还是难以让大家信服，外边距合并怎么就更能接近设计师的预期效果。外边距需要多少，不应该由我们自己来控制吗？我需要 `10px` 的外边距，就这样设置：
+
+```css
+p:nth-child(1) {
+  margin-bottom: 10px;
+}
+```
+
+需要 `20px` 的外边距，可以这样设置：
+
+```css
+p:nth-child(1) {
+  margin-bottom: 10px;
+}
+
+p:nth-child(2) {
+  margin-top: 10px;
+}
+```
+
+但由于外边距合并的原因，实际上这里依然只有 `10px` 的外边距，这显然不是我们想要的。那么外边距合并的意义究竟是什么？
+
+在 [W3school](https://www.w3school.com.cn/css/css_margin_collapse.asp) 里，我找到了较为合理的解释。这里以由几个 `p` 标签组成的文本为例。因为 `p` 标签默认是存在 `margin` 值的，在没有外边距合并的情况下，相邻 `p` 标签之间的间距为它们上下外边距之和，这意味着中间 `p` 标签的间距是首尾间距的两倍。而如果发生外边距合并，各处的间距就会是一致的。
+![是否存在外边距合并比较](/images/articles/margin-collapse/compare.png)
+
+## 重新认识外边距合并
+
+先看看 [W3C 对其的解释](https://w3c.github.io/csswg-drafts/css2/#collapsing-margins)：
+
+> In CSS, the adjoining margins of two or more boxes (which might or might not be siblings) can combine to form a single margin. Margins that combine this way are said to collapse, and the resulting combined margin is called a collapsed margin.
+
+基于这个解释，我进行了一些修改和补充：在 CSS 中，处于**普通流**中的**两个或多个**盒子（它们可能是兄弟关系，也可能不是）的**毗邻**外边距在**垂直方向**上会合并成一个外边距。这种现象我们称之为外边距折叠（合并）。
+
+我们重点关注加粗显示的关键字：普通流、两个或多个、毗邻、垂直方向。
+
+### 两个或多个
+
+单一的元素并不会产生外边距合并的问题，只有两个以上的元素才可能出现。
+
+### 垂直方向
+
+外边距合并仅仅发生在垂直方向上，水平方向上的外边距是不会发生合并的。
+
+### 普通流（in-flow）
+
+W3C 并没有明确给出 in-flow 的定义，但是却[定义了 out of flow](https://w3c.github.io/csswg-drafts/css2/#positioning-scheme)：
+
+> An element is called out of flow if it is floated, absolutely positioned, or is the root element. An element is called in-flow if it is not out-of-flow.
+
+由此可知，只要不是 `floated`、`absolutely positioned`、`root element` 的，我们都可以称为是普通流（in-flow）。
+
+### 毗邻
+
+何为毗邻，这意味着它们的外边距之间是不存在任何“阻挡物”的，W3C 对此有明确的描述，我们将在后面说到。
+
+## 外边距合并如何产生
+
+下面详细描述了怎么样的外边距我们可以称为**毗邻**，这也是可能产生外边距合并的所有情况。
+
+> Two margins are **adjoining** if and only if:
+>
+> - both belong to in-flow block-level boxes that participate in the same block formatting context
+> - no line boxes, no clearance, no padding and no border separate them
+> - both belong to vertically-adjacent box edges, i.e. form one of the following pairs:
+>   - top margin of a box and top margin of its first in-flow child
+>   - bottom margin of box and top margin of its next in-flow following sibling
+>   - bottom margin of a last in-flow child and bottom margin of its parent if the parent has 'auto' computed height
+>   - top and bottom margins of a box that does not establish a new block formatting context and that has zero computed 'min-height', zero or 'auto' computed 'height', and no in-flow children
+
+当且仅当以下条件成立时，两个外边距毗邻：
+
+- 两个属于普通流的块级盒子都处于同一个块格式化上下文（BFC）
+- 没有 `line boxes`、`clearance`、`padding`、`border` 将它们分隔开
+- 两者的边缘在垂直方向上相邻，如下所示：
+  - 盒子的上外边距与其第一个子元素（同时要是普通流的）的上外边距
+  - 盒子的下外边距与其相邻的兄弟元素（普通流）的上外边距
+  - 当父元素的 `height` 计算值为 `auto` 时，最后一个子元素（普通流）的下外边距与其父元素的下外边距
+  - 盒子的上外边距和下外边距，该盒子没有建立新的 BFC，且 `min-height` 计算值为 `0`、`height` 计算值为 `0` 或 `auto`，同时没有普通流的子元素
+
+其实总结起来能产生外边距合并的就三种情况：一是父子元素之间，二是兄弟（同级）元素之间、三是空的块级元素自身。下面我将为你逐一演示。
+
+### 父子元素之间
+
+```html
+<style>
+  .parent {
+    margin: 20px;
+    width: 240px;
+  }
+
+  .child {
+    height: 200px;
+    margin: 10px;
+  }
+</style>
+
+<body>
+  <div class="parent">
+    <div class="child"></div>
+  </div>
+</body>
+```
+
+当一个元素包含在另一个元素中时（假设没有内边距或边框把外边距分隔开），它们的上或下外边距都会发生合并。
+![父子元素间的外边距合并](/images/articles/margin-collapse/parent-child-collapse.png)
+
+### 同级元素之间
+
+```html
+<style>
+  .box {
+    width: 130px;
+    height: 100px;
+  }
+
+  .box:nth-of-type(1) {
+    margin: 20px 0;
+  }
+
+  .box:nth-of-type(2) {
+    margin: 10px 0;
+  }
+</style>
+
+<body>
+  <div class="box"></div>
+  <div class="box"></div>
+</body>
+```
+
+相邻的两个同级元素之间，第一个元素的下外边距会与第二个元素的上外边距进行合并。
+![同级元素间的外边距合并](/images/articles/margin-collapse/sibling-collapse.png)
+
+### 空的块元素自身
+
+```html
+<style>
+  div {
+    margin: 20px 0;
+  }
+</style>
+
+<body>
+  <div></div>
+  <p>距离上面仅有 20px</p>
+</body>
+```
+
+尽管看上去有些奇怪，但是外边距甚至可以与自身发生合并。假设有一个空元素，它有外边距，但是没有边框或填充。在这种情况下，上外边距与下外边距就碰到了一起，它们会发生合并：
+![空的块元素自身的外边距合并](/images/articles/margin-collapse/self-collapse.png)
+
+## 如何避免外边距合并
+
+上面我们已经详细介绍了所有可能产生外边距合并的情况了，那么该如何避免呢？其实只要两个外边距的关系不是毗邻（Adjoining），那么就不会产生外边距合并。在前面我们已经了解到外边距毗邻是存在很多限制条件的，而我们只需要破坏其中一个条件即可。W3C 对此也作了一些总结：
+
+> - Margins between a floated box and any other box do not collapse (not even between a float and its in-flow children).
+> - Margins of elements that establish new block formatting contexts (such as floats and elements with 'overflow' other than 'visible') do not collapse with their in-flow children.
+> - Margins of absolutely positioned boxes do not collapse (not even with their in-flow children).
+> - Margins of inline-block boxes do not collapse (not even with their in-flow children).
+> - The bottom margin of an in-flow block-level element always collapses with the top margin of its next in-flow block-level sibling, unless that sibling has clearance.
+> - The top margin of an in-flow block element collapses with its first in-flow block-level child’s top margin if the element has no top border, no top padding, and the child has no clearance.
+> - The bottom margin of an in-flow block box with a 'height' of 'auto' and a 'min-height' of zero collapses with its last in-flow block-level child’s bottom margin if the box has no bottom padding and no bottom border and the child’s bottom margin does not collapse with a top margin that has clearance.
+> - A box’s own margins collapse if the 'min-height' property is zero, and it has neither top or bottom borders nor top or bottom padding, and it has a 'height' of either 0 or 'auto', and it does not contain a line box, and all of its in-flow children’s margins (if any) collapse.
+
+- 浮动元素和其它元素之间不会产生外边距合并（包括浮动元素与其子元素之间）
+- 建立了新的块格式化上下文（BFC）的元素不会与其子元素产生外边距合并
+- 采用绝对定位（absolutely positioned）的元素不会产生外边距合并（包括与其子元素之间）
+- `inline-block` 元素不会产生外边距合并（包括与其子元素之间）
+- 块级元素的下外边距总是会与下一个块级兄弟元素的上外边距产生合并，除非同级之间存在 `clearance`
+- 块级元素的上外边距会与其第一个块级子元素的上外边距产生合并，除非该元素有 `border-top`、或者有 `padding-top`、或其子元素存在 `clearance`
+- `height` 为 `auto`，且 `min-height` 为 `0` 的块级元素（没有 `border-bottom`，没有 `padding-bottom`）的下外边距与其最后一个子元素（自身没有发生外边距合并）的下外边距合并
+- 如果一个元素的 `min-height` 为 `0`、没有上下 `border`、没有上下 `padding`、`height` 为 `0` 或 `auto`、不包含子元素，那么它自身的外边距会进行合并
+
+以父子元素之间的外边距合并为例，我们基于上述提到的方案来进行解决。
+
+```html
+<style>
+  .parent {
+    margin: 20px 0;
+    background-color: aquamarine;
+  }
+
+  .child {
+    width: 200px;
+    height: 200px;
+    margin: 10px 0;
+    background-color: bisque;
+  }
+</style>
+
+<body>
+  <div class="parent">
+    <div class="child"></div>
+  </div>
+</body>
+```
+
+默认不进行任何处理，这里会产生外边距合并。
+
+按照前面提到的方案，通过建立新的 BFC 是可以解决父子元素之间的外边距合并问题的。接下来，我们对代码进行一些修改。
+
+```html
+<style>
+  .parent {
+    overflow: hidden;
+    margin: 20px 0;
+    background-color: aquamarine;
+  }
+
+  .child {
+    width: 200px;
+    height: 200px;
+    margin: 10px 0;
+    background-color: bisque;
+  }
+</style>
+
+<body>
+  <div class="parent">
+    <div class="child"></div>
+  </div>
+</body>
+```
+
+当然，你采用其它方式建立 BFC 也是可以的。
+
+除此之外，我们还可以通过设置 `border` 或 `padding` 来解决。
+
+```html
+<style>
+  .parent {
+    border: 1px solid transparent;
+    margin: 20px 0;
+    background-color: aquamarine;
+  }
+
+  .child {
+    width: 200px;
+    height: 200px;
+    margin: 10px 0;
+    background-color: bisque;
+  }
+</style>
+
+<body>
+  <div class="parent">
+    <div class="child"></div>
+  </div>
+</body>
+```
+
+至于其它方案，大家可以进行尝试，这里就不过多介绍了。但我要补充的一点是，对于同级元素之间的外边距合并，没有什么直接的解决办法。因此，同级元素之间最好只给其中一个元素设置外边距。
+
+## 参考资料
+
+- [Collapsing margins](https://w3c.github.io/csswg-drafts/css2/#collapsing-margins)
+- [深度剖析 Margin 塌陷，BFC，Containing Block 之间的关系](https://zhuanlan.zhihu.com/p/30168984)
+- [深入理解 CSS 外边距折叠（Margin Collapse）](https://tech.youzan.com/css-margin-collapse/)
