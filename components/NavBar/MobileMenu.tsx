@@ -5,7 +5,7 @@ import ClientOnlyPortal from '../ClientOnlyPortal'
 import MobileMenuButton from './MobileMenuButton'
 import navLinks from '~/data/nav-links'
 
-function MobileMenu() {
+const MobileMenu = () => {
   const [navShown, setNavShown] = useState(false)
 
   const onToggleNav = () => setNavShown(!navShown)

@@ -8,7 +8,7 @@ type Props = {
   selector: string
 }
 
-function ClientOnlyPortal({ children, selector }: Props) {
+const ClientOnlyPortal = ({ children, selector }: Props) => {
   const ref = useRef<Element | null>(null)
   const [mounted, setMounted] = useState(false)
 
