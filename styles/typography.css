@@ -1,0 +1,49 @@
+/* some custom typography style */
+
+.prose a {
+  color: rgb(var(--primary-color) / 0.6);
+  text-decoration: none;
+  border-bottom: 1px solid rgb(var(--primary-color) / 0.2);
+  transition: all linear .3s;
+}
+
+.prose a:hover {
+  color: rgb(var(--primary-color) / 0.8);
+  border-bottom: 1px solid rgb(var(--primary-color) / 0.4);
+}
+
+/* headings style */
+.prose a.anchor {
+  color: inherit;
+  font-weight: inherit;
+  border-bottom: 1px dashed rgb(var(--neutral-color-heavy) / 0);
+}
+
+.prose a.anchor:hover {
+  color: inherit;
+  border-bottom: 1px dashed rgb(var(--neutral-color-heavy) / 0.6);
+}
+
+/* footnotes style */
+.prose .footnotes {
+  font-size: 12px;
+  margin-top: 3.5em;
+  border-top: 1px solid rgb(var(--neutral-color-light));
+  color: rgb(var(--neutral-color-midst));
+}
+
+.prose .footnotes h2 {
+  display: none;
+}
+
+.prose a[data-footnote-ref='true']::before {
+  content: '[';
+}
+
+.prose a[data-footnote-ref='true']::after {
+  content: ']';
+}
+
+.prose .footnotes .data-footnote-backref {
+  font-family: 'monospace';
+}

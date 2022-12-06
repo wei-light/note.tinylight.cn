@@ -21,7 +21,7 @@ const Article = ({ code, frontmatter }: InferGetServerSidePropsType<typeof getSt
           {frontmatter.title}
         </h2>
       </section>
-      <article>
+      <article className="prose">
         <MDXContent />
       </article>
     </>
