@@ -1,11 +1,11 @@
-import Image from 'next/image'
-import { useMemo } from 'react'
-import dayjs from 'dayjs'
+import { useEffect, useMemo, useRef } from 'react'
 import { getMDXComponent } from 'mdx-bundler/client'
+import ArticleHeader from '~/components/ArticleHeader'
 import { getAllFileSlugs, loadMDXFile } from '~/lib/mdx'
 import { splitPath } from '~/lib/utils/file-utils'
 
 import type { GetStaticPaths, InferGetServerSidePropsType } from 'next'
+import { getElementTop } from '~/lib/utils/dom-utils'
 
 type Params = {
   params: {
@@ -13,46 +13,61 @@ type Params = {
   }
 }
 
-const Article = ({ code, frontmatter }: InferGetServerSidePropsType<typeof getStaticProps>) => {
+const Article = (
+  { code, frontmatter: { title, date, duration, cover } }:
+  InferGetServerSidePropsType<typeof getStaticProps>,
+) => {
   const MDXContent = useMemo(() => getMDXComponent(code), [code])
+  const articleRef = useRef<HTMLElement>(null)
+
+  useEffect(() => {
+    const ref = articleRef.current!
+
+    const navigate = () => {
+      if (location.hash) {
+        const el = document.querySelector(decodeURIComponent(location.hash))
+        if (el) {
+          const top = getElementTop(el)
+
+          window.scrollTo({
+            top: top - 48,
+            left: 0,
+            behavior: 'smooth',
+          })
+        }
+      }
+    }
+
+    const handleAnchors = (
+      e: MouseEvent,
+    ) => {
+      const link = (e.target as HTMLElement).closest('a.anchor')
+        || (e.target as HTMLElement).closest('a[data-footnote-ref="true"]')
+        || (e.target as HTMLElement).closest('a[data-footnote-backref="true"]')
+
+      if (link) {
+        e.preventDefault()
+        const hash = link.getAttribute('href')
+        history.replaceState({}, '', hash)
+        navigate()
+      }
+    }
+
+    window.addEventListener('hashchange', navigate)
+    ref.addEventListener('click', handleAnchors)
+    // run when page apper
+    setTimeout(navigate, 500)
+
+    return () => {
+      window.removeEventListener('hashchange', navigate)
+      ref.removeEventListener('click', handleAnchors)
+    }
+  }, [])
 
   return (
     <>
-      <section className="pt-8 pb-10">
-        {frontmatter.cover && (
-          <div className="relative overflow-hidden h-auto mb-9 aspect-[17/9] rounded-xl">
-            <Image
-              alt="cover"
-              src={frontmatter.cover}
-              fill
-              className="object-cover"
-            />
-          </div>
-        )}
-        <h2 className="mt-6 mb-4 text-3xl font-bold sm:text-4xl">
-          {frontmatter.title}
-        </h2>
-        <div className="flex items-center text-sm">
-          <a href="https://github.com/wei-light">
-            <Image
-              alt="avatar"
-              src="/avatar.jpg"
-              width={24}
-              height={24}
-              quality={100}
-              className="rounded-full"
-            />
-          </a>
-          <p className="space-x-1 ml-4 opacity-40">
-            <time dateTime={frontmatter.date}>
-              {dayjs(frontmatter.date).format('MMMM DD, YYYY')}
-            </time>
-            <i>{'·'}</i>
-            <span>{frontmatter.duration}</span>
-          </p>
-        </div>
-      </section>
-      <article className="prose">
+      <ArticleHeader title={title} date={date} duration={duration} cover={cover} />
+      <article ref={articleRef} className="prose">
         <MDXContent />
       </article>
     </>
