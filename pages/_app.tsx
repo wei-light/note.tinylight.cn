@@ -1,6 +1,7 @@
 import '~/styles/globals.css'
 import '~/styles/prose.css'
 import '~/styles/typography.css'
+import '~/styles/prism-theme.css'
 import LayoutWrapper from '~/components/LayoutWrapper'
 
 import type { AppProps } from 'next/app'
