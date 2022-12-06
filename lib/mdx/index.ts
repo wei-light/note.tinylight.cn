@@ -12,7 +12,7 @@ import rehypePrismPlus from 'rehype-prism-plus'
 
 import { root } from './config'
 import { serialize } from '~/lib/utils/business-utils'
-import { removeFileSuffix } from '~/lib/utils/file-utils'
+import { getAllFilePathsDepth, removeFileSuffix } from '~/lib/utils/file-utils'
 
 import type { ContentType, PickFrontMatter } from './types'
 
@@ -49,7 +49,12 @@ function getAllFrontMatter<T extends ContentType>(type: T) {
 
 function getAllFileSlugs(type: ContentType) {
   const baseDirectory = path.join(root, type)
-  return fs.readdirSync(baseDirectory)
+  const allPaths = getAllFilePathsDepth(baseDirectory, { relative: true })
+
+  // Remove Unexpected File
+  return allPaths
+    .filter(item => /\.mdx?$/.test(item))
+    .map(item => removeFileSuffix(item))
 }
 
 async function loadMDXFile<T extends ContentType>(type: T, slug: string) {

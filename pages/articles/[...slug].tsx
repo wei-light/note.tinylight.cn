@@ -3,13 +3,13 @@ import { useMemo } from 'react'
 import dayjs from 'dayjs'
 import { getMDXComponent } from 'mdx-bundler/client'
 import { getAllFileSlugs, loadMDXFile } from '~/lib/mdx'
-import { removeFileSuffix } from '~/lib/utils/file-utils'
+import { splitPath } from '~/lib/utils/file-utils'
 
 import type { GetStaticPaths, InferGetServerSidePropsType } from 'next'
 
 type Params = {
   params: {
-    slug: string
+    slug: string[]
   }
 }
 
@@ -65,15 +65,15 @@ export const getStaticPaths: GetStaticPaths = async () => {
   return {
     paths: allSlugs.map(slug => ({
       params: {
-        slug: removeFileSuffix(slug),
+        slug: splitPath(slug),
       },
     })),
-    fallback: true,
+    fallback: false,
   }
 }
 
 export const getStaticProps = async ({ params }: Params) => {
-  const articleData = await loadMDXFile('articles', params.slug)
+  const articleData = await loadMDXFile('articles', splitPath.reset(params.slug))
 
   return {
     props: {
