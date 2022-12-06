@@ -12,15 +12,15 @@ module.exports = {
       white: colors.white,
       black: colors.black,
       neutral: {
-        100: 'var(--neutral-color-lightest)',
-        200: 'var(--neutral-color-lighter)',
-        300: 'var(--neutral-color-light)',
-        400: 'var(--neutral-color-midst)',
-        500: 'var(--neutral-color-heavy)',
-        600: 'var(--neutral-color-heavier)',
-        700: 'var(--neutral-color-heaviest)',
+        100: 'rgb(var(--neutral-color-lightest))',
+        200: 'rgb(var(--neutral-color-lighter))',
+        300: 'rgb(var(--neutral-color-light))',
+        400: 'rgb(var(--neutral-color-midst))',
+        500: 'rgb(var(--neutral-color-heavy))',
+        600: 'rgb(var(--neutral-color-heavier))',
+        700: 'rgb(var(--neutral-color-heaviest))',
       },
-      primary: 'var(--primary-color)',
+      primary: 'rgb(var(--primary-color))',
     },
     extend: {
       fontFamily: {
