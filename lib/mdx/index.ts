@@ -1,8 +1,17 @@
 import fs from 'fs'
 import path from 'path'
 import matter from 'gray-matter'
+import { bundleMDX } from 'mdx-bundler'
+// remark package
+import remarkGfm from 'remark-gfm'
+import remarkSlug from 'remark-slug'
+import remarkAutoLinkHeadings from 'remark-autolink-headings'
+// rehype package
+import rehypeExternalLinks from 'rehype-external-links'
+import rehypePrismPlus from 'rehype-prism-plus'
 
 import { root } from './config'
+import { serialize } from '~/lib/utils/business-utils'
 import { removeFileSuffix } from '~/lib/utils/file-utils'
 
 import type { ContentType, PickFrontMatter } from './types'
@@ -35,9 +44,54 @@ function getAllFrontMatter<T extends ContentType>(type: T) {
    * Reason: `object` ("[object Date]") cannot be serialized as JSON. Please only return JSON serializable data types.
    * https://github.com/vercel/next.js/issues/11993
    */
-  return JSON.parse(JSON.stringify(allFrontMatter)) as PickFrontMatter[T]
+  return serialize(allFrontMatter as Array<PickFrontMatter[T]>)
+}
+
+function getAllFileSlugs(type: ContentType) {
+  const baseDirectory = path.join(root, type)
+  return fs.readdirSync(baseDirectory)
+}
+
+async function loadMDXFile<T extends ContentType>(type: T, slug: string) {
+  const mdxPath = path.join(root, type, `${slug}.mdx`)
+  const mdPath = path.join(root, type, `${slug}.md`)
+  const fileContents = fs.existsSync(mdxPath)
+    ? fs.readFileSync(mdxPath, 'utf8')
+    : fs.readFileSync(mdPath, 'utf8')
+
+  const { code, frontmatter } = await bundleMDX<PickFrontMatter[T]>({
+    source: fileContents,
+    mdxOptions(options) {
+      options.remarkPlugins = [
+        ...(options.remarkPlugins ?? []),
+        remarkGfm,
+        remarkSlug,
+        [
+          remarkAutoLinkHeadings,
+          {
+            behavior: 'wrap',
+            linkProperties: { ariaHidden: true, class: 'anchor' },
+          },
+        ],
+      ]
+      options.rehypePlugins = [
+        ...(options.rehypePlugins ?? []),
+        [rehypeExternalLinks, { target: '_blank', rel: 'noopener' }],
+        [rehypePrismPlus, { ignoreMissing: true }],
+      ]
+
+      return options
+    },
+  })
+
+  return {
+    code,
+    frontmatter: serialize(frontmatter),
+  }
 }
 
 export {
   getAllFrontMatter,
+  getAllFileSlugs,
+  loadMDXFile,
 }

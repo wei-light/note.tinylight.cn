@@ -8,7 +8,7 @@ export type ArticleFrontMatter = {
 }
 
 export type PickFrontMatter = {
-  articles: ArticleFrontMatter[]
+  articles: ArticleFrontMatter
 }
 
 export type ContentType = keyof PickFrontMatter

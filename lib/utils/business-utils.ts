@@ -8,6 +8,11 @@ function sortDesc<T>(a: T, b: T): number {
   }
 }
 
+function serialize<T>(obj: T): T {
+  return JSON.parse(JSON.stringify(obj))
+}
+
 export {
   sortDesc,
+  serialize,
 }
