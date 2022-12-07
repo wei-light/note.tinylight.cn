@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { getMDXComponent } from 'mdx-bundler/client'
+import { getMDXExport } from 'mdx-bundler/client'
 import LayoutWrapper from '~/components/LayoutWrapper'
 import ArticleHeader from '~/components/ArticleHeader'
 import ArticleNavBar from '~/components/ArticleNavBar'
@@ -11,6 +11,8 @@ import { getElementTop } from '~/lib/utils/dom-utils'
 
 import type { GetStaticPaths, InferGetServerSidePropsType } from 'next'
 import type { CustomNextPage } from 'types/next'
+import type { TOCItem } from '~/types/common'
+import type { ArticleFrontMatter } from '~/lib/mdx/types'
 
 type Params = {
   params: {
@@ -21,7 +23,8 @@ type Params = {
 const Article: CustomNextPage<InferGetServerSidePropsType<typeof getStaticProps>> = (
   { code, frontmatter: { title, date, duration, cover } },
 ) => {
-  const MDXContent = useMemo(() => getMDXComponent(code), [code])
+  const mdxExport = getMDXExport<{ toc: TOCItem[] }, ArticleFrontMatter>(code)
+  const MDXContent = useMemo(() => mdxExport.default, [mdxExport])
   const articleRef = useRef<HTMLElement>(null)
   const [showArticleNav, setShowArticleNav] = useState(false)
 
@@ -44,7 +47,7 @@ const Article: CustomNextPage<InferGetServerSidePropsType<typeof getStaticProps>
 
   return (
     <LayoutWrapper
-      navBar={<NavBar showPageNavBar={showArticleNav}><ArticleNavBar title={title} /></NavBar>}
+      navBar={<NavBar showPageNavBar={showArticleNav}><ArticleNavBar toc={mdxExport.toc} title={title} /></NavBar>}
     >
       <ArticleHeader title={title} date={date} duration={duration} cover={cover} />
       <article ref={articleRef} className="prose">
