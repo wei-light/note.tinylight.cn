@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import AppLink from '~/components/AppLink'
 import { useState } from 'react'
 import { Transition } from '@headlessui/react'
 import ClientOnlyPortal from '../ClientOnlyPortal'
@@ -31,9 +31,9 @@ const MobileMenu = () => {
             <ul className="flex flex-col divide-y divide-neutral-200 opacity-50">
               {navLinks.map(nav => (
                 <li key={nav.id}>
-                  <Link href={nav.path} onClick={onToggleNav} className="flex items-center h-12">
+                  <AppLink href={nav.path} onClick={onToggleNav} className="flex items-center h-12">
                     {nav.title}
-                  </Link>
+                  </AppLink>
                 </li>
               ))}
             </ul>

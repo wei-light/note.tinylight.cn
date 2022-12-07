@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import AppLink from '~/components/AppLink'
 import { getAllFrontMatter } from '~/lib/mdx'
 
 import type { GetStaticProps, InferGetServerSidePropsType } from 'next'
@@ -16,11 +16,11 @@ const PostsPage = ({ postsList }: InferGetServerSidePropsType<typeof getStaticPr
       <section className="flex flex-col gap-y-16">
         {postsList.map(({ slug, title, excerpt }) => (
           <article key={slug}>
-            <Link href={`/articles/${slug}`}>
+            <AppLink href={`/articles/${slug}`}>
               <h3 className="text-xl text-neutral-500 transition-colors duration-300 hover:text-primary">
                 {title}
               </h3>
-            </Link>
+            </AppLink>
             {excerpt
               && <p className="mt-2 opacity-[0.35]">{excerpt}</p>
             }

@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import AppLink from '~/components/AppLink'
 import MobileMenu from './MobileMenu'
 import navLinks from '~/data/nav-links'
 
@@ -6,7 +6,7 @@ const NavBar = () => (
   <header className="overflow-hidden fixed top-0 left-0 right-0 h-[var(--nav-height)] bg-white/70 border-b border-neutral-200 z-50 backdrop-blur-lg">
     <div className="flex justify-between items-center h-full px-6">
       <section className="text-neutral-600">
-        <Link href="/">Tinylight</Link>
+        <AppLink href="/">Tinylight</AppLink>
       </section>
       <section className="sm:hidden">
         <MobileMenu />
@@ -15,9 +15,9 @@ const NavBar = () => (
         <ul className="flex gap-x-4">
           {navLinks.map(nav => (
             <li key={nav.id}>
-              <Link href={nav.path} className="opacity-60 transition-opacity duration-300 hover:opacity-80">
+              <AppLink href={nav.path} className="opacity-60 transition-opacity duration-300 hover:opacity-80">
                 {nav.title}
-              </Link>
+              </AppLink>
             </li>
           ))}
         </ul>
