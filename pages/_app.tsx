@@ -4,12 +4,16 @@ import '~/styles/typography.css'
 import '~/styles/prism-theme.css'
 import LayoutWrapper from '~/components/LayoutWrapper'
 
-import type { AppProps } from 'next/app'
+import type { CustomAppProps } from 'types/next'
 
-const App = ({ Component, pageProps }: AppProps) => (
-  <LayoutWrapper>
-    <Component {...pageProps} />
-  </LayoutWrapper>
-)
+const App = ({ Component, pageProps }: CustomAppProps) => {
+  // Allows you to define different layouts for different pages
+  const getLayout = (
+    Component.getLayout
+    || (page => <LayoutWrapper>{page}</LayoutWrapper>)
+  )
+
+  return getLayout(<Component {...pageProps} />)
+}
 
 export default App
