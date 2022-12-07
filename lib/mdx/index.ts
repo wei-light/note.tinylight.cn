@@ -6,6 +6,7 @@ import { bundleMDX } from 'mdx-bundler'
 import remarkGfm from 'remark-gfm'
 import remarkSlug from 'remark-slug'
 import remarkAutoLinkHeadings from 'remark-autolink-headings'
+import remarkToc from './remark/remarkToc'
 // rehype package
 import rehypeExternalLinks from 'rehype-external-links'
 import rehypePrismPlus from 'rehype-prism-plus'
@@ -71,6 +72,7 @@ async function loadMDXFile<T extends ContentType>(type: T, slug: string) {
         ...(options.remarkPlugins ?? []),
         remarkGfm,
         remarkSlug,
+        remarkToc,
         [
           remarkAutoLinkHeadings,
           {
