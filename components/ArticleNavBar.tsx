@@ -9,6 +9,7 @@ import ClientOnlyPortal from './ClientOnlyPortal'
 import Outline from './Outline'
 
 import type { TOCItem } from '~/types/common'
+import { useLockBodyScroll } from '~/hooks/common'
 
 type Props = {
   title: string
@@ -21,6 +22,8 @@ const ArticleNavBar = ({ title, toc }: Props) => {
     window.scrollTo({ top: 0, left: 0, behavior: 'smooth' })
   }
   const onToggleToc = () => setShowToc(!showToc)
+
+  useLockBodyScroll(showToc)
 
   return (
     <>

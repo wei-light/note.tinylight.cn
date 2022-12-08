@@ -3,10 +3,12 @@ import { useState } from 'react'
 import { Transition } from '@headlessui/react'
 import ClientOnlyPortal from '../ClientOnlyPortal'
 import MobileMenuButton from './MobileMenuButton'
+import { useLockBodyScroll } from '~/hooks/common'
 import navLinks from '~/data/nav-links'
 
 const MobileMenu = () => {
   const [navShown, setNavShown] = useState(false)
+  useLockBodyScroll(navShown)
 
   const onToggleNav = () => setNavShown(!navShown)
 
