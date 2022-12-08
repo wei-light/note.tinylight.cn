@@ -12,6 +12,8 @@
   "dependencies": {
     "@ant-design/icons": "^4.8.0",
     "@headlessui/react": "^1.7.4",
+    "@mdx-js/mdx": "^2.1.5",
+    "@mdx-js/react": "^2.1.5",
     "@types/node": "18.11.10",
     "@types/react": "18.0.26",
     "@types/react-dom": "18.0.9",
@@ -22,6 +24,7 @@
     "eslint-config-next": "13.0.6",
     "gray-matter": "^4.0.3",
     "mdx-bundler": "^9.0.1",
+    "mdx-embed": "^1.1.2",
     "next": "13.0.6",
     "prism-theme-vars": "^0.2.4",
     "react": "18.2.0",
