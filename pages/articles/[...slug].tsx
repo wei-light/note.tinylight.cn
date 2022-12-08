@@ -9,7 +9,7 @@ import { getAllFileSlugs, loadMDXFile } from '~/lib/mdx'
 import { splitPath } from '~/lib/utils/file-utils'
 import { getElementTop } from '~/lib/utils/dom-utils'
 
-import type { GetStaticPaths, InferGetServerSidePropsType } from 'next'
+import type { GetStaticPaths, InferGetStaticPropsType } from 'next'
 import type { CustomNextPage } from 'types/next'
 import type { TOCItem } from '~/types/common'
 import type { ArticleFrontMatter } from '~/lib/mdx/types'
@@ -20,7 +20,7 @@ type Params = {
   }
 }
 
-const Article: CustomNextPage<InferGetServerSidePropsType<typeof getStaticProps>> = (
+const Article: CustomNextPage<InferGetStaticPropsType<typeof getStaticProps>> = (
   { code, frontmatter: { title, date, duration, cover } },
 ) => {
   const mdxExport = getMDXExport<{ toc: TOCItem[] }, ArticleFrontMatter>(code)
