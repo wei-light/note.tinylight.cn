@@ -1,9 +1,10 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
-import { getMDXExport } from 'mdx-bundler/client'
+import { type FC, useEffect, useMemo, useRef, useState } from 'react'
+import { type MDXContentProps, getMDXExport } from 'mdx-bundler/client'
 import LayoutWrapper from '~/components/LayoutWrapper'
 import ArticleHeader from '~/components/ArticleHeader'
 import ArticleNavBar from '~/components/ArticleNavBar'
 import NavBar from '~/components/NavBar'
+import MDXTableComponent from '~/components/MDXTableComponent'
 import { useHeadingAnchors } from '~/hooks/article'
 import { getAllFileSlugs, loadMDXFile } from '~/lib/mdx'
 import { splitPath } from '~/lib/utils/file-utils'
@@ -24,7 +25,7 @@ const Article: CustomNextPage<InferGetStaticPropsType<typeof getStaticProps>> = 
   { code, frontmatter: { title, date, duration, cover } },
 ) => {
   const mdxExport = getMDXExport<{ toc: TOCItem[] }, ArticleFrontMatter>(code)
-  const MDXContent = useMemo(() => mdxExport.default, [mdxExport])
+  const MDXContent = useMemo<FC<MDXContentProps>>(() => mdxExport.default, [mdxExport])
   const articleRef = useRef<HTMLElement>(null)
   const [showArticleNav, setShowArticleNav] = useState(false)
 
@@ -51,7 +52,7 @@ const Article: CustomNextPage<InferGetStaticPropsType<typeof getStaticProps>> = 
     >
       <ArticleHeader title={title} date={date} duration={duration} cover={cover} />
       <article ref={articleRef} className="prose">
-        <MDXContent />
+        <MDXContent components={{ table: MDXTableComponent }} />
       </article>
     </LayoutWrapper>
   )
