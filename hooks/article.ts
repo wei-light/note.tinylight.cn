@@ -1,7 +1,10 @@
+import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import { getElementTop } from '~/lib/utils/dom-utils'
 
 function useHeadingAnchors() {
+  const router = useRouter()
+
   useEffect(() => {
     const navigate = () => {
       if (location.hash) {
@@ -23,7 +26,7 @@ function useHeadingAnchors() {
     ) => {
       const link = (e.target as HTMLElement).closest('a')
 
-      if (link && !link.download) {
+      if (link && !link.closest('nav') && !link.download) {
         const { origin, pathname, hash, target } = link
 
         // only intercept internal links
@@ -43,6 +46,8 @@ function useHeadingAnchors() {
               window.history.replaceState({}, '', hash)
               navigate()
             }
+          } else {
+            router.push(pathname)
           }
         }
       }
