@@ -1,7 +1,7 @@
 ---
 title: CSS 中的外边距合并
-date: 2022-12-05
-duration: 8min
+date: 2022-10-14
+duration: 12min
 excerpt: 有关 CSS 外边距合并的一些细节知识，或许会让你有收获
 ---
 
@@ -10,6 +10,7 @@ excerpt: 有关 CSS 外边距合并的一些细节知识，或许会让你有收
 ## 外边距合并的意义
 
 刚遇到这类问题时，相信大家肯定和我有同样的疑惑：外边距合并究竟有什么意义呢？
+
 CSS 1.0 规范给出了[解释](https://www.w3.org/TR/CSS1/#vertical-formatting)：
 
 > The width of the margin on non-floating block-level elements specifies the minimum distance to the edges of surrounding boxes. Two or more adjoining vertical margins (i.e., with no border, padding or content between them) are collapsed to use the maximum of the margin values. In most cases, after collapsing the vertical margins the result is visually more pleasing and closer to what the designer expects.
@@ -39,7 +40,8 @@ p:nth-child(2) {
 但由于外边距合并的原因，实际上这里依然只有 `10px` 的外边距，这显然不是我们想要的。那么外边距合并的意义究竟是什么？
 
 在 [W3school](https://www.w3school.com.cn/css/css_margin_collapse.asp) 里，我找到了较为合理的解释。这里以由几个 `p` 标签组成的文本为例。因为 `p` 标签默认是存在 `margin` 值的，在没有外边距合并的情况下，相邻 `p` 标签之间的间距为它们上下外边距之和，这意味着中间 `p` 标签的间距是首尾间距的两倍。而如果发生外边距合并，各处的间距就会是一致的。
-![是否存在外边距合并比较](/images/articles/margin-collapse/compare.png)
+
+![](/images/articles/margin-collapse/compare.png)
 
 ## 重新认识外边距合并
 
@@ -120,6 +122,7 @@ W3C 并没有明确给出 in-flow 的定义，但是却[定义了 out of flow](h
 ```
 
 当一个元素包含在另一个元素中时（假设没有内边距或边框把外边距分隔开），它们的上或下外边距都会发生合并。
+
 ![父子元素间的外边距合并](/images/articles/margin-collapse/parent-child-collapse.png)
 
 ### 同级元素之间
@@ -147,6 +150,7 @@ W3C 并没有明确给出 in-flow 的定义，但是却[定义了 out of flow](h
 ```
 
 相邻的两个同级元素之间，第一个元素的下外边距会与第二个元素的上外边距进行合并。
+
 ![同级元素间的外边距合并](/images/articles/margin-collapse/sibling-collapse.png)
 
 ### 空的块元素自身
@@ -165,6 +169,7 @@ W3C 并没有明确给出 in-flow 的定义，但是却[定义了 out of flow](h
 ```
 
 尽管看上去有些奇怪，但是外边距甚至可以与自身发生合并。假设有一个空元素，它有外边距，但是没有边框或填充。在这种情况下，上外边距与下外边距就碰到了一起，它们会发生合并：
+
 ![空的块元素自身的外边距合并](/images/articles/margin-collapse/self-collapse.png)
 
 ## 如何避免外边距合并

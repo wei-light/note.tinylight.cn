@@ -1,0 +1,148 @@
+---
+title: Align Items 和 Align Content
+date: 2022-10-03
+duration: 15min
+---
+
+import {CodePen} from 'mdx-embed'
+
+Flex 布局毫无疑问是现代开发中常用的布局方式，以前，我总是停留在会使用的阶段。说“会使用”其实是有些牵强的，由于对 Flex 布局里的属性也是一知半解，实际使用时总是要花费大量的时间去调整样式。与其说“会使用”，倒不如说是凭运气、凭感觉调出来的。
+
+其实说了这么多就是想表达 Flex 布局并没有我们想象中这么简单，它是存在很多细节点和注意项的。如果你之前使用过 Flex 布局，相信你不会对 `align-items` 和 `align-content` 这两个属性感到陌生。对于这两个属性，我虽然有些了解，但还是存在不少的困惑的。如果你也和我一样，不妨与我一起探究一下 `align-items` 和 `align-content` 属性的一些细节。本文是我在查看规范后，根据自己的理解编写的，如果存在错误或描述不恰当的地方，希望大家能友好地指出。
+
+## Flex line
+
+在开始之前，有必要先解释一下什么是 flex 行（flex line），它是我们进行下去的基石。
+
+![](/images/articles/css/align-items-and-align-content/1.png)
+
+flex 行（flex line，后面我可能简称为“行”）是一个用于分组和布局的假想容器，flex 容器中的 flex 子项在 flex 行内进行布局和对齐。flex 容器可以是单行或多行的，这取决于 `flex-wrap` 属性：
+
+- 单行（`flex-wrap: nowrap`）：所有的子项都放在一行中，这可能导致内容溢出
+- 多行（`flex-wrap: wrap` 或 `flex-wrap: wrap-reverse`）：把子项折分到多行，类似于当文本变得太宽而无法容纳在当前行时，如何将其换行。而每一行都至少包含一个子项，除非 flex 容器本身就是空的
+
+## 初步介绍
+
+如果你已经能理解 flex line 这个概念，相信下面的内容对你来说也是比较简单的。
+
+现在，我们先来看看概念：
+
+- `align-items`：设置 **flex 子项**在**当前行**的交叉轴上的对齐方式
+- `align-content`：当出现折行时，设置**不同行**在 **flex 容器**交叉轴上的对齐方式
+
+如果你感到难以理解，我将上面的描述“翻译”成下面一些点。
+
+1. `align-items` 控制的是子项的对齐方式，而且是基于子项所处的这一行来对齐的
+2. `align-content`：控制的是不同行之间的对齐方式，是以行作为整体进行控制的，这意味着不出现折行时，该属性不起作用
+
+![](/images/articles/css/align-items-and-align-content/2.png)
+
+当然，上面都是我根据自己的理解总结的，你可能想看看官方对此的解释，下面是我从规范中截取的两段描述。
+
+![](/images/articles/css/align-items-and-align-content/3.png)
+
+## 细节探究
+
+这部分会对 `align-items` 和 `align-content` 属性的取值选择性地进行介绍，主要探究一些我们平时不太注意的细节。
+
+### Align Items
+
+`align-items` 控制的是子项在当前行的交叉轴上的对齐方式。
+
+我们先来回顾一下 `align-items` 的取值：
+
+- `stretch`（默认值）：它会尽可能在交叉轴方向上扩展至当前行的大小（宽度或高度，取决于交叉轴的方向）
+- `flex-start`：与当前行的交叉轴的起始位置对齐
+- `flex-end`：与当前行的交叉轴的结束位置对齐
+- `center`：与当前行的交叉轴的中点对齐
+- `baseline`：依据基线对齐
+
+可以看到，所有的取值都与当前这一行有关。
+
+行的概念我们前面已经介绍过了，但是，子项的对齐是要依赖于行的大小（范围）的，下面会详细描述。
+这里需要说明的是单行和多行是属于不同的两种情况，行的大小也是要分情况讨论的，现在先说说单行的情况下。**当 flex 容器是单行时，该行交叉轴上的大小就是 flex 容器交叉轴上的大小，该行主轴上的大小等于 flex 容器内容区主轴上的大小。**
+
+基于 `stretch` 这一取值，我们来进行分析。
+
+<CodePen codePenId="xxjjvzL" />
+
+这里我们给 flex 容器设置的是 `150px` 的高度，并且未进行折行。可以看到子项最终都拉伸至当前行的高度，就是这里 flex 容器的高度。
+
+### Align Content
+
+当设置换行时，`align-content` 控制各行在 flex 容器交叉轴上的对齐方式。
+
+它可能有以下取值：
+
+- `flex-start`：对齐 flex 容器交叉轴的起始位置
+- `flex-end`：对齐 flex 容器交叉轴的结束位置
+- `center`：对齐 flex 容器交叉轴的中点
+- `space-between`：首尾两行分布于 flex 容器交叉轴两端，相邻行之间均分剩余空间
+- `space-around`：相邻行之间均分剩余空间，首尾两行距两端的距离是相邻行间距的一半
+- `stretch`：每一行都会伸展以占据剩余空间。如果不存在剩余空间，它将和 `flex-start` 表现一致。否则，剩余空间将会在平均分配给每一行，从而增加它们在交叉轴方向上的大小。
+
+前面我们只是提到了单行情况下行的大小如何确定。现在，我们来说说在多行情况下，行的大小该如何确定。**当 flex 容器是多行时，每一行在交叉轴上的尺寸会在包含该行所有子项的同时尽可能最小化。**
+
+#### 分析一
+
+与 `align-content` 相关的细节会多一些，如果你理解得足够好得话，完全可以跳过这部分。
+
+首先，我们来分析 `stretch` 值，假设有如下代码结构。
+
+<CodePen codePenId="bGMKNaJ" />
+
+你可能会存在疑惑：为什么中间存在间隙，第二行为什么没有接着第一行进行排列？
+
+之所以展示这样的效果是 `align-content` 和 `align-items` 属性共同作用的结果，下面我会分步进行解析。
+
+首先，这个案例我们开启了换行，`align-content` 实际上已经生效了，虽然我们没有显式指定这一属性，但它是有默认值 `stretch` 的。因此，每一行都会平分剩余空间，那么这里的剩余空间是多少呢？由于我给每个子项都设置了固定高度 `100px`，所以对于每一行来说，只需要 `100px` 的高度就可以包裹所有子项。剩余空间自然就是容器高度减去这两行的高度了。
+
+但不要忘记，`align-items` 也是有默认值 `stretch` 的，它将作用于每一行的子项。因为我给每个子项都设置了固定的高度，所以这里并未体现出拉伸的效果。
+
+![](/images/articles/css/align-items-and-align-content/4.png)
+
+#### 分析二
+
+这里主要是说明一个细节点，只要 flex 容器开启了换行（`flex-wrap` 不是 `nowrap`），即使只有一行的情况下，`align-content` 同样是生效的。请看下面例子。
+
+<CodePen codePenId="MWGXOjB" />
+
+可以看到，虽然这里从视觉上只展示了一行，但我已经在容器中开启了换行，因此我设置的 `align-content: center` 是有效果的。简而言之，一旦设置了换行，我们就要以 flex 容器是多行的情况去对待。
+
+## 实例分析
+
+在上面我们已经对 `align-items` 和 `align-content` 属性的一些细节进行了分析，而这部分内容主要是帮助大家加深印象。如果上面的内容你已经理解了，这部分就非常轻松了。
+
+### 实例一
+
+假设有如下代码结构。
+
+<CodePen codePenId="dyeKoNw" />
+
+我分别给 1、3、6 这几个子项设置高度为 `50px`、`100px`、`150px`，其余子项并未设置高度。因此，对于第一行来说，仅仅需要 `100px` 的高度就可以包含所有子项。同理，第二行的高度为 `150px`。
+
+由于设置了 `align-content: flex-start`，各行会与 flex 容器交叉轴起始位置对齐。但不要忘了，`align-items` 是有默认值的，它会使未设置高度的子项拉伸至当前行的高度。
+
+![](/images/articles/css/align-items-and-align-content/5.png)
+
+### 实例二
+
+接下来，我们对前面的例子进行改造，继续进行分析。
+
+<CodePen codePenId="ZEoRaXm" />
+
+我仅仅是在前面例子的基础上设置了 `align-content: center` 和 `align-items: flex-end`。
+
+这里我就直接画图来描述了。
+![](/images/articles/css/align-items-and-align-content/6.png)
+
+## 总结
+
+`align-content` 决定的是多行的对齐方式，行的对齐方式决定好后，行里面的子项如何对齐，`align-content` 是无法控制的，这得由 `align-items` 来控制。
+
+在单行情况下，这一行交叉轴上的大小就是容器在交叉轴上的大小。而在多行情况下，每一行在交叉轴上的尺寸为包含该行所有子项所需的最小尺寸。
+
+## 参考资料
+
+1. [Fles Lines - W3C](https://w3c.github.io/csswg-drafts/css-flexbox-1/#flex-lines)
+2. [Alignment - W3C](https://w3c.github.io/csswg-drafts/css-flexbox-1/#alignment)

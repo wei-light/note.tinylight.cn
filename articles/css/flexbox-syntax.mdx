@@ -1,0 +1,193 @@
+---
+title: Flex 布局：语法篇
+date: 2022-10-01
+duration: 15min
+---
+
+import {CodePen} from 'mdx-embed'
+
+在 CSS 2 时代，实现网页布局的方案是非常有限的，我们能做的仅仅是在[盒模型](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Box_Model/Introduction_to_the_CSS_box_model)的基础上依赖于浮动或定位完成布局。但这种布局方式在一些特殊场景下就有点力不从心了，如垂直居中。你可能会说通过 `line-height` 或 `vertical-align` 不是也能设置吗，但它们内部的机制是复杂的，更多时候它都不会按照我们预期的效果运行。
+
+但 Flex 布局的出现就能很好地解决这一类问题，水平垂直方向如何对齐，空间如何分配都可以由你来控制。它的出现正是为了解决现代复杂布局场景的。
+
+## 概念
+
+Flexible Box 模型，通常被称为 flexbox，是一种一维的布局模型。它给 flexbox 的子元素之间提供了强大的空间分布和对齐能力。
+
+当给一个元素设置 `display` 属性为 `flex` 或 `inline-flex` 时，该元素就称为 flex 容器（flex container）。它的所有子元素会自动成为容器成员，称为 flex 子项（flex item）。
+
+![Flexbox Concept](/images/articles/css/flexbox-syntax/flexbox-concept.png)
+
+容器内有两根轴，默认情况下，水平方向的是主轴（main axis），而垂直于主轴的轴称为交叉轴（cross axis）。主轴的起始位置叫做 main start，主轴的结束位置叫做 main end，flex 子项从主轴的起始位置向结束位置排列。交叉轴的起始位置叫做 cross start，交叉轴的结束位置叫做 cross end，由子项填充形成的 flex 行（flex line）从交叉轴的起始位置向结束位置排列。
+
+容器或子项在主轴上占据的空间叫做 main size，占据交叉轴上的空间叫做 cross size。
+
+## 开启 Flex 布局
+
+假设有以下页面结构：
+
+```html
+<div class="box">
+  <div class="item">item1</div>
+  <div class="item">item2</div>
+  <div class="item">item3</div>
+</div>
+```
+
+一个 `div` 包含三个 `div` 子元素，默认情况下，作为块级元素的 `div` 独占一行。
+
+![](/images/articles/css/flexbox-syntax/1.png)
+
+想要开启 Flex 布局，只需要给外层容器设置 `display: flex` 即可：
+
+```css
+.box {
+  display: flex;
+}
+```
+
+![](/images/articles/css/flexbox-syntax/2.png)
+
+可以看到，现在子项在容器中从主轴的起始位置到结束位置依次进行排列了。
+
+如果你希望 flex 容器是作为行内元素存在而不是块级元素，你可以设置成 `display: inline-flex`。
+
+_注意，开启 Flex 布局后，子元素的 `float`、`clear` 和 `vertical-align` 属性将不起作用。_
+
+## 容器的属性
+
+与 Flex 布局相关的属性有很多，按照属性的作用对象，我们大体上可分为两类：作用于容器的属性和作用于子项的属性。下面先来介绍容器的属性：
+
+![](/images/articles/css/flexbox-syntax/mindmap1.png)
+
+### flex-direction
+
+`flex-direction` 属性通过设置 flex 容器主轴的方向来指定 flex 子项的排列方式。
+
+它可能的取值为：
+
+- `row`（默认值）：主轴为水平方向，起始位置在左侧
+- `row-reverse`：与 `row` 一样，仅仅是互换了起始位置和结束位置
+- `column`：主轴为垂直方向，起始位置在上方
+- `column-reverse`：与 `column` 一样，仅仅是互换了起始位置和结束位置
+
+![](/images/articles/css/flexbox-syntax/3.png)
+
+### flex-wrap
+
+`flex-wrap` 控制 flex 容器是单行（single-line）还是多行（multi-line），包括各个行在交叉轴上的排列顺序。
+
+默认情况下是不换行。下面我设置 flex 容器中子项的宽度之和溢出容器。
+
+<CodePen codePenId="OJZZZwG" height={400} />
+
+可以看到即使子项总宽度溢出容器，它依然表现为单行（即不换行）。
+
+让人困惑的是，它不换行也应该溢出容器显示，但实际上这里的子项却被压缩了。这主要和 `flex` 属性的默认值有关，它的默认值表现为子项不扩展剩余空间，但溢出时会进行收缩。你也可以改变 `flex` 属性的默认，设置不允许子项收缩，来达到溢出显示的效果。
+
+下面是它的取值：
+
+1. `nowrap`（默认）：不换行，就是上面演示的
+
+![](/images/articles/css/flexbox-syntax/4.png)
+
+2. `wrap`：换行，从交叉轴的起始位置到结束位置排列各行
+
+![](/images/articles/css/flexbox-syntax/5.png)
+
+3. `wrap-reverse`：与 `wrap` 一样，但互换交叉轴的起始位置和结束位置
+
+![](/images/articles/css/flexbox-syntax/6.png)
+
+### flex-flow
+
+`flex-flow` 是 `flex-direction` 属性和 `flex-wrap` 属性的简写形式，默认为 `flex-flow: row nowrap`。
+
+### justify-content
+
+`justify-content` 属性定义了子项在主轴方向上的对齐方式。
+
+它可能的取值如下，具体的对齐方式与主轴有关，下面假设主轴从左到右：
+
+- `flex-start`（默认值）：靠左对齐
+- `flex-end`：靠右对齐
+- `center`：居中对齐
+- `space-between`：两端对齐，中间的元素平分剩余空间
+- `space-around`：相邻元素均分剩余空间，两端分配的空间是中间相邻元素分配空间的一半
+- `space-evenly`：分散对齐，所有元素均分剩余空间
+
+![](/images/articles/css/flexbox-syntax/7.png)
+
+### align-items
+
+`align-items` 属性设置**子项**在**当前行的交叉轴上**的对齐方式。
+
+它有如下取值，我们假设交叉轴从上到下：
+
+- `stretch`（默认值）：如果你没有给子项设置高度或高度设为 `auto`，则子项会拉伸至当前行的高度
+- `flex-start`：靠上对齐，与当前行的交叉轴起始位置对齐
+- `flex-end`：靠下对齐，与当前行的交叉轴结束位置对齐
+- `center`：居中对齐，与当前行的交叉轴中点对齐
+- `baseline`：基线对齐，如果你给子项设置不同的字体大小，会看到它们是沿基线对齐的
+
+![](/images/articles/css/flexbox-syntax/8.png)
+
+### align-content
+
+如果 flex 容器开启了折行（即 `flex-wrap` 为非 `nowrap`），`align-content` 将控制**各行之间**如何在**容器交叉轴上**对齐。
+
+`align-content` 和 `justify-content` 的取值基本类似，且表现出的效果也相近，因此不作文字描述。
+
+![](/images/articles/css/flexbox-syntax/9.png)
+
+_由于 align-content 和 align-items 属性是让人比较容易混淆且具备较多细节的，如果你想进一步了解它们，可以参考我的另一篇文章：_[_Align Items 和 Align Content_](/articles/css/align-items-and-align-content)
+
+## 子项的属性
+
+前面我已经介绍了与容器相关的属性，接下来，我将介绍和子项相关的属性。
+
+![](/images/articles/css/flexbox-syntax/mindmap2.png)
+
+### flex-grow
+
+`flex-grow` 设置子项的伸展比例，它的作用是当容器存在剩余空间时，子项该如何分配这些剩余空间。默认是 `0`，表示不会占用剩余空间来扩展自身。
+
+![](/images/articles/css/flexbox-syntax/10.png)
+
+如果所有子项的 `flex-grow` 属性都设置为 `1`，则它们将等分剩余空间（如果有的话）。而如果有一个子项的 `flex-grow` 值为 `2`，其余都为 `1`，则前者分配的剩余空间是后者的两倍。
+
+_如果你对这些计算感兴趣，可以参考我写的另一篇文章：_[_Flex 布局中的计算_](/articles/css/flexbox-calc)
+
+### flex-shrink
+
+`flex-shrink` 设置子项的收缩比例，它的作用是当容器空间不足时，子项如何收缩。默认是 `1`，表示子项会收缩，但具体收缩多少，除了和这个收缩比例有关，还受到自身大小的影响。由于较为复杂，所以不会在这里过多描述。
+
+![](/images/articles/css/flexbox-syntax/11.png)
+
+如果你给子项设置 `flex-shrink` 属性值为 `0`，那么将表示子项使用它的初始宽度，不进行收缩，最终内容可能会溢出容器。
+
+### flex-basic
+
+`flex-basic` 指定了在分配剩余空间之前，子项占据的主轴大小（main size），它接收与 `width` 和 `height` 相似的取值。与 `width` 或 `height` 相比，`flex-basic` 具有更高的优先级。
+
+### flex
+
+`flex` 是 `flex-grow`、`flex-shrink` 和 `flex-basic` 属性的简写，默认值是 `0 1 auto`。
+
+它还有以下常见的值：
+
+- `initial`：默认值，等同于 `flex: 0 1 auto`，表示不扩展剩余空间，但会在内容溢出时进行收缩
+- `auto`：等同于 `flex: 1 1 auto`，它是完全弹性的，既能扩展，也会收缩
+- `none`：等同于 `flex: 0 0 auto`，完全非弹性的，不具备任何扩展收缩能力
+
+### align-self
+
+`align-self` 允许你指定单个子项的对齐方式以覆盖 `align-items` 的值。默认值为 `auto`，表示它将使用容器所设置的 `align-items` 值。它的取值和 `align-items` 一样，就是多了 `auto`。
+
+![](/images/articles/css/flexbox-syntax/12.png)
+
+### order
+
+`order` 属性规定了子项在容器中布局的顺序，默认是 `0`。子项按照 `order` 属性的值的增序进行排列，数值越小，排列越靠前。拥有相同 `order` 属性值的子项则按照它们在代码中出现的顺序进行排列。
+
+![](/images/articles/css/flexbox-syntax/13.png)
