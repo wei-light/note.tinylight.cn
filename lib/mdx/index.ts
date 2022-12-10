@@ -10,6 +10,7 @@ import remarkToc from './remark/remarkToc'
 // rehype package
 import rehypeExternalLinks from 'rehype-external-links'
 import rehypePrismPlus from 'rehype-prism-plus'
+import rehypeImageFigure from './rehype/rehypeImageFigure'
 
 import { root } from './config'
 import { serialize } from '~/lib/utils/business-utils'
@@ -85,6 +86,7 @@ async function loadMDXFile<T extends ContentType>(type: T, slug: string) {
         ...(options.rehypePlugins ?? []),
         [rehypeExternalLinks, { target: '_blank', rel: 'noopener' }],
         [rehypePrismPlus, { ignoreMissing: true }],
+        rehypeImageFigure,
       ]
 
       return options

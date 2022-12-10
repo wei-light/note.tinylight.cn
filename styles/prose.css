@@ -302,3 +302,21 @@
 .prose tbody td {
   vertical-align: baseline;
 }
+
+.prose figure {
+  margin-top: 2em;
+  margin-bottom: 2em;
+}
+
+.prose figure > * {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.prose figcaption {
+  color: rgb(var(--neutral-color-midst));
+  text-align: center;
+  font-size: 0.875em;
+  line-height: 1.4285714;
+  margin-top: 0.8571429em;
+}
