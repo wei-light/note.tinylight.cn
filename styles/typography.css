@@ -50,7 +50,12 @@
 
 /* other */
 .prose div {
-  margin-top: 1.25em;
-  margin-bottom: 1.25em;
+  margin-top: 1.5em;
+  margin-bottom: 1.5em;
 
+}
+
+.prose div > * {
+  margin-top: 0;
+  margin-bottom: 0;
 }
