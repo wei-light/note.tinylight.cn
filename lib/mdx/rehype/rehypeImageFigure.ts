@@ -2,11 +2,13 @@ import { visit } from 'unist-util-visit'
 import { h } from 'hastscript'
 
 import type { Plugin } from 'unified'
-import type { Element, Root } from 'hast'
+import type { Element, ElementContent, Root } from 'hast'
 
 type RehypeImageFigureOptions = {
   className: string
 }
+
+const isImageElement = (el: ElementContent) => el.type === 'element' && el.tagName === 'img'
 
 const rehypeImageFigure: Plugin<[RehypeImageFigureOptions?], Root> = (options) => {
   const className = (options && options.className) || 'rehype-figure'
@@ -22,12 +24,21 @@ const rehypeImageFigure: Plugin<[RehypeImageFigureOptions?], Root> = (options) =
   }
 
   return (tree) => {
-    visit(tree, { tagName: 'p' }, (node) => {
-      node.children.forEach((child, index) => {
-        if (child.type === 'element' && child.tagName === 'img') {
-          node.children[index] = buildFigure(child)
+    visit(tree, { tagName: 'p' }, (node, index) => {
+      const images = node.children.filter(n => isImageElement(n)) as Element[]
+
+      if (images.length && index) {
+        if (images.length === 1 && node.children.length === 1) {
+          tree.children[index] = buildFigure(images[0])
+        } else {
+          node.children.forEach((child, index) => {
+            if (isImageElement(child)) {
+              node.children[index] = buildFigure(child as Element)
+            }
+          })
+          tree.children[index] = h('div', node.children)
         }
-      })
+      }
     })
   }
 }
