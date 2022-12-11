@@ -12,7 +12,7 @@ import { splitPath } from '~/lib/utils/file-utils'
 import { getElementTop } from '~/lib/utils/dom-utils'
 
 import type { GetStaticPaths, InferGetStaticPropsType } from 'next'
-import type { CustomNextPage } from 'types/next'
+import type { CustomNextPage } from '~/types/next'
 import type { ArticleFrontMatter, TOCItem } from '~/types/shared'
 import type { MDXExport } from 'mdx-bundler/dist/types'
 

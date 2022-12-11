@@ -4,7 +4,7 @@ import '~/styles/typography.css'
 import '~/styles/prism-theme.css'
 import LayoutWrapper from '~/components/LayoutWrapper'
 
-import type { CustomAppProps } from 'types/next'
+import type { CustomAppProps } from '~/types/next'
 
 const App = ({ Component, pageProps }: CustomAppProps) => {
   /**
