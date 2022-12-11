@@ -181,7 +181,7 @@
 
 .prose code {
   padding: 0.2em 0.4em;
-  background-color: rgb(var(--neutral-color-heavier) / 0.1);
+  background-color: rgb(var(--neutral-color-light) / 0.5);
   font-size: 0.875em;
   border-radius: 6px;
 }

@@ -22,7 +22,7 @@ const Book = ({ bookData: { title, groups } }: InferGetStaticPropsType<typeof ge
     <ul className="flex flex-col gap-y-12">
       {groups.map(group => (
         <li key={group.groupId}>
-          <h3 className="mb-3 text-xl text-gray-700">{group.groupTitle}</h3>
+          <h3 className="mb-3 text-xl text-neutral-500">{group.groupTitle}</h3>
           <section className="space-y-2 -mx-2">
             {group.list.map(item => (
               <AppLink className="block" href={item.url} key={item.url}>
