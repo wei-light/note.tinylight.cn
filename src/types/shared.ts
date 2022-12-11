@@ -9,6 +9,7 @@ export type ArticleFrontMatter = {
 
 export type PickFrontMatter = {
   articles: ArticleFrontMatter
+  authors: null
 }
 
 export type ContentType = keyof PickFrontMatter
