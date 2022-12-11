@@ -3,7 +3,7 @@
   font-size: 1rem;
   max-width: 65ch;
   line-height: 1.75;
-  color: rgb(var(--neutral-color-heavy));
+  color: rgb(var(--neutral-color-dark));
 }
 
 .prose > :first-child {
@@ -15,12 +15,12 @@
 }
 
 .prose a {
-  color: rgb(var(--neutral-color-heavier));
+  color: rgb(var(--neutral-color-darker));
   text-decoration: underline;
 }
 
 .prose strong {
-  color: rgb(var(--neutral-color-heavier));
+  color: rgb(var(--neutral-color-darker));
   font-weight: 700;
 }
 
@@ -142,7 +142,7 @@
 }
 
 .prose h2 {
-  color: rgb(var(--neutral-color-heavier));
+  color: rgb(var(--neutral-color-darker));
   font-weight: 700;
   font-size: 1.5em;
   margin-top: 2em;
@@ -155,7 +155,7 @@
 }
 
 .prose h3 {
-  color: rgb(var(--neutral-color-heavier));
+  color: rgb(var(--neutral-color-darker));
   font-weight: 700;
   font-size: 1.25em;
   margin-top: 1.6em;
@@ -168,7 +168,7 @@
 }
 
 .prose h4 {
-  color: rgb(var(--neutral-color-heavier));
+  color: rgb(var(--neutral-color-darker));
   font-weight: 700;
   margin-top: 1.5em;
   margin-bottom: 0.5em;
@@ -207,7 +207,7 @@
 }
 
 .prose pre {
-  color: rgb(var(--neutral-color-heavy));
+  color: rgb(var(--neutral-color-dark));
   background-color: rgb(var(--neutral-color-lightest));
   overflow-x: auto;
   font-weight: 400;
@@ -250,7 +250,7 @@
 }
 
 .prose thead th {
-  color: rgb(var(--neutral-color-heavy));
+  color: rgb(var(--neutral-color-dark));
   font-weight: 700;
   vertical-align: bottom;
   padding-right: 0.5714286em;

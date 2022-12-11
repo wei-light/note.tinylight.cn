@@ -61,7 +61,7 @@ const ArticleNavBar = ({ title, toc }: Props) => {
           </Transition.Child>
           <Transition.Child
             onClick={onToggleToc}
-            className="absolute top-0 left-0 right-0 bottom-0 bg-black/30 -z-10"
+            className="absolute top-0 left-0 right-0 bottom-0 bg-[rgb(0_0_0_/_0.3)] -z-10"
             enter="transition-opacity ease-linear duration-300"
             enterFrom="opacity-0"
             enterTo="opacity-100"

@@ -11,7 +11,7 @@ type Props = {
 }
 
 const NavBar = ({ children, showPageNavBar }: Props) => (
-  <header className="overflow-hidden fixed top-0 left-0 right-0 h-[var(--nav-height)] bg-white/70 border-b border-neutral-200 z-50 backdrop-blur-lg">
+  <header className="overflow-hidden fixed top-0 left-0 right-0 h-[var(--nav-height)] bg-light/70 border-b border-neutral-200 z-50 backdrop-blur-lg">
     {/* App NavBar */}
     <div
       className={classNames(
