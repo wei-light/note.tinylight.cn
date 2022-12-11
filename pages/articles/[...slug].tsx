@@ -14,6 +14,7 @@ import type { GetStaticPaths, InferGetStaticPropsType } from 'next'
 import type { CustomNextPage } from 'types/next'
 import type { TOCItem } from '~/types/common'
 import type { ArticleFrontMatter } from '~/lib/mdx/types'
+import type { MDXExport } from 'mdx-bundler/dist/types'
 
 type Params = {
   params: {
@@ -21,11 +22,19 @@ type Params = {
   }
 }
 
+type MDXExportData = Omit<MDXExport<{ toc: TOCItem[] }, ArticleFrontMatter>, 'default'> & {
+  default: FC<MDXContentProps>
+}
+
 const Article: CustomNextPage<InferGetStaticPropsType<typeof getStaticProps>> = (
-  { code, frontmatter: { title, date, duration, cover } },
+  { code },
 ) => {
-  const mdxExport = getMDXExport<{ toc: TOCItem[] }, ArticleFrontMatter>(code)
-  const MDXContent = useMemo<FC<MDXContentProps>>(() => mdxExport.default, [mdxExport])
+  const {
+    default: MDXContent,
+    toc,
+    frontmatter: { title, date, duration, cover },
+  }: MDXExportData = useMemo(() => getMDXExport(code), [code])
+
   const articleRef = useRef<HTMLElement>(null)
   const [showArticleNav, setShowArticleNav] = useState(false)
 
@@ -48,11 +57,15 @@ const Article: CustomNextPage<InferGetStaticPropsType<typeof getStaticProps>> = 
 
   return (
     <LayoutWrapper
-      navBar={<NavBar showPageNavBar={showArticleNav}><ArticleNavBar toc={mdxExport.toc} title={title} /></NavBar>}
+      navBar={
+        <NavBar showPageNavBar={showArticleNav}>
+          <ArticleNavBar toc={toc} title={title} />
+        </NavBar>
+      }
     >
       <ArticleHeader title={title} date={date} duration={duration} cover={cover} />
       <article ref={articleRef} className="prose">
-        <MDXContent components={{ table: MDXTableComponent }} />
+        {useMemo(() => <MDXContent components={{ table: MDXTableComponent }} />, [MDXContent])}
       </article>
     </LayoutWrapper>
   )

@@ -4,7 +4,7 @@ import AppLink from './AppLink'
 
 type Porps = {
   title: string
-  date: string
+  date: string | Date
   duration: string
   cover?: string
 }
@@ -36,7 +36,7 @@ const ArticleHeader = ({ title, date, duration, cover }: Porps) => (
         />
       </AppLink>
       <p className="space-x-1 ml-4 opacity-40">
-        <time dateTime={date}>
+        <time dateTime={String(date)}>
           {dayjs(date).format('MMMM DD, YYYY')}
         </time>
         <i>{'·'}</i>

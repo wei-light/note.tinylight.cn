@@ -59,14 +59,14 @@ function getAllFileSlugs(type: ContentType) {
     .map(item => removeFileSuffix(item))
 }
 
-async function loadMDXFile<T extends ContentType>(type: T, slug: string) {
+async function loadMDXFile(type: ContentType, slug: string) {
   const mdxPath = path.join(root, type, `${slug}.mdx`)
   const mdPath = path.join(root, type, `${slug}.md`)
   const fileContents = fs.existsSync(mdxPath)
     ? fs.readFileSync(mdxPath, 'utf8')
     : fs.readFileSync(mdPath, 'utf8')
 
-  const { code, frontmatter } = await bundleMDX<PickFrontMatter[T]>({
+  const { code } = await bundleMDX({
     source: fileContents,
     mdxOptions(options) {
       options.remarkPlugins = [
@@ -95,7 +95,6 @@ async function loadMDXFile<T extends ContentType>(type: T, slug: string) {
 
   return {
     code,
-    frontmatter: serialize(frontmatter),
   }
 }
 

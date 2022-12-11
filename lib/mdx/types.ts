@@ -1,7 +1,7 @@
 export type ArticleFrontMatter = {
   slug: string
   title: string
-  date: string
+  date: string | Date
   duration: string
   excerpt?: string
   cover?: string
