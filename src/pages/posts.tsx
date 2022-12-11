@@ -3,10 +3,10 @@ import AppLink from '~/components/AppLink'
 import { getAllFrontMatter } from '~/lib/mdx'
 import { sortDesc } from '~/lib/utils/business-utils'
 
-import type { GetStaticProps, InferGetServerSidePropsType } from 'next'
+import type { GetStaticProps, InferGetStaticPropsType } from 'next'
 import type { ArticleFrontMatter } from '~/types/shared'
 
-const PostsPage = ({ postsList }: InferGetServerSidePropsType<typeof getStaticProps>) => {
+const PostsPage = ({ postsList }: InferGetStaticPropsType<typeof getStaticProps>) => {
   return (
     <>
       <PageSEO title="Posts - Tiny Light" />
