@@ -1,6 +1,11 @@
+import PageSEO from '~/components/PageSEO'
+
 function Home() {
   return (
-    <div>Home</div>
+    <>
+      <PageSEO title="Tiny Light" />
+      <div>Home</div>
+    </>
   )
 }
 

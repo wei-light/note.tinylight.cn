@@ -1,3 +1,4 @@
+import PageSEO from '~/components/PageSEO'
 import AppLink from '~/components/AppLink'
 import bookList from '~/data/book-list'
 
@@ -11,6 +12,7 @@ type Params = {
 
 const Book = ({ bookData: { title, groups } }: InferGetStaticPropsType<typeof getStaticProps>) => (
   <>
+    <PageSEO title={`Books(${title}) - Tiny Light`} />
     <section className="relative flex items-center justify-center h-48">
       <h2 className="text-center text-3xl text-neutral-600 sm:text-4xl">
         {title}

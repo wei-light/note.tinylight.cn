@@ -1,8 +1,10 @@
+import PageSEO from '~/components/PageSEO'
 import AppLink from '~/components/AppLink'
 import bookList from '~/data/book-list'
 
 const BooksPage = () => (
   <>
+    <PageSEO title="Books - Tiny Light" />
     <section className="relative flex items-center justify-center h-48">
       <h2 className="text-center text-3xl text-neutral-600 sm:text-4xl">
         Books
@@ -16,7 +18,7 @@ const BooksPage = () => (
               {title}
             </h3>
           </AppLink>
-            <p className="mt-2 opacity-[0.35]">{description}</p>
+          <p className="mt-2 opacity-[0.35]">{description}</p>
         </article>
       ))}
     </section>

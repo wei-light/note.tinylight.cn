@@ -1,5 +1,6 @@
 import { type FC, useEffect, useMemo, useRef, useState } from 'react'
 import { type MDXContentProps, getMDXExport } from 'mdx-bundler/client'
+import PageSEO from '~/components/PageSEO'
 import LayoutWrapper from '~/components/LayoutWrapper'
 import ArticleHeader from '~/components/ArticleHeader'
 import ArticleNavBar from '~/components/ArticleNavBar'
@@ -62,6 +63,7 @@ const Article: CustomNextPage<InferGetStaticPropsType<typeof getStaticProps>> = 
         </NavBar>
       }
     >
+      <PageSEO title={title} />
       <ArticleHeader title={title} date={date} duration={duration} cover={cover} />
       <article ref={articleRef} className="prose">
         {useMemo(() => <MDXContent components={{ table: MDXTableComponent }} />, [MDXContent])}

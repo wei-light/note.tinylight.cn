@@ -1,3 +1,4 @@
+import PageSEO from '~/components/PageSEO'
 import AppLink from '~/components/AppLink'
 import { getAllFrontMatter } from '~/lib/mdx'
 import { sortDesc } from '~/lib/utils/business-utils'
@@ -8,6 +9,7 @@ import type { ArticleFrontMatter } from '~/types/shared'
 const PostsPage = ({ postsList }: InferGetServerSidePropsType<typeof getStaticProps>) => {
   return (
     <>
+      <PageSEO title="Posts - Tiny Light" />
       <section className="relative flex items-center justify-center h-48">
         <h2 className="text-center text-3xl text-neutral-600 sm:text-4xl">
           Posts
