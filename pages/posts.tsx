@@ -1,9 +1,9 @@
 import AppLink from '~/components/AppLink'
 import { getAllFrontMatter } from '~/lib/mdx'
+import { sortDesc } from '~/lib/utils/business-utils'
 
 import type { GetStaticProps, InferGetServerSidePropsType } from 'next'
-import type { ArticleFrontMatter } from '~/lib/mdx/types'
-import { sortDesc } from '~/lib/utils/business-utils'
+import type { ArticleFrontMatter } from '~/types/shared'
 
 const PostsPage = ({ postsList }: InferGetServerSidePropsType<typeof getStaticProps>) => {
   return (

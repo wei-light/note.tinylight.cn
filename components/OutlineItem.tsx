@@ -1,6 +1,6 @@
 import classNames from 'classnames'
 
-import type { TOCItem } from '~/types/common'
+import type { TOCItem } from '~/types/shared'
 
 type Props = {
   root?: boolean

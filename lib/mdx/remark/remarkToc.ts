@@ -6,7 +6,7 @@ import { valueToEstree } from 'estree-util-value-to-estree'
 import type { Root } from 'mdast'
 import type { Plugin } from 'unified'
 import type { MdxjsEsm } from 'mdast-util-mdx'
-import type { TOCItem } from '~/types/common'
+import type { TOCItem } from '~/types/shared'
 
 function createExport(object: object): MdxjsEsm {
   return {

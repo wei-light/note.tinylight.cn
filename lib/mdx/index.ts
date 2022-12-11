@@ -16,7 +16,7 @@ import { root } from './config'
 import { serialize } from '~/lib/utils/business-utils'
 import { getAllFilePathsDepth, removeFileSuffix } from '~/lib/utils/file-utils'
 
-import type { ContentType, PickFrontMatter } from './types'
+import type { ContentType, PickFrontMatter } from '~/types/shared'
 
 function getAllFrontMatter<T extends ContentType>(type: T) {
   const baseDirectory = path.join(root, type)

@@ -1,4 +1,8 @@
-import type { TOCItem } from '~/types/common'
+import type { TOCItem } from '~/types/shared'
+
+/**
+ * Reference: https://github.com/vuejs/vitepress/blob/main/src/client/theme-default/composables/outline.ts
+ */
 
 function resolveToc(
   headers: TOCItem[],

@@ -12,8 +12,7 @@ import { getElementTop } from '~/lib/utils/dom-utils'
 
 import type { GetStaticPaths, InferGetStaticPropsType } from 'next'
 import type { CustomNextPage } from 'types/next'
-import type { TOCItem } from '~/types/common'
-import type { ArticleFrontMatter } from '~/lib/mdx/types'
+import type { ArticleFrontMatter, TOCItem } from '~/types/shared'
 import type { MDXExport } from 'mdx-bundler/dist/types'
 
 type Params = {

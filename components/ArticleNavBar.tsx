@@ -7,9 +7,9 @@ import {
 import { Transition } from '@headlessui/react'
 import ClientOnlyPortal from './ClientOnlyPortal'
 import Outline from './Outline'
-
-import type { TOCItem } from '~/types/common'
 import { useLockBodyScroll } from '~/hooks/common'
+
+import type { TOCItem } from '~/types/shared'
 
 type Props = {
   title: string

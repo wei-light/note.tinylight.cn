@@ -1,7 +1,7 @@
 import OutlineItem from './OutlineItem'
 import { resolveToc } from '~/lib/utils/toc-utils'
 
-import type { TOCItem } from '~/types/common'
+import type { TOCItem } from '~/types/shared'
 
 type Props = {
   toc: TOCItem[]
