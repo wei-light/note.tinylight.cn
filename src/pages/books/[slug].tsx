@@ -3,6 +3,7 @@ import AppLink from '~/components/AppLink'
 import bookList from '~/data/book-list'
 
 import type { GetStaticPaths, InferGetStaticPropsType } from 'next'
+import PageTitle from '~/components/PageTitle'
 
 type Params = {
   params: {
@@ -13,14 +14,7 @@ type Params = {
 const Book = ({ bookData: { title, groups } }: InferGetStaticPropsType<typeof getStaticProps>) => (
   <>
     <PageSEO title={`Books(${title}) - Tiny Light`} />
-    <section className="relative flex items-center justify-center h-48">
-      <h2 className="text-center text-3xl text-neutral-600 sm:text-4xl">
-        {title}
-      </h2>
-      <span className="absolute top-4 right-0 px-1 border border-neutral-200 text-xs text-neutral-400 rounded">
-        Book
-      </span>
-    </section>
+    <PageTitle title={title} sign="Book" />
     <ul className="flex flex-col gap-y-12">
       {groups.map(group => (
         <li key={group.groupId}>
