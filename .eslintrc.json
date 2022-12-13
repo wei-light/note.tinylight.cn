@@ -9,6 +9,7 @@
     "import/order": "off",
     "curly": ["warn", "all"],
     "brace-style": "off",
-    "@typescript-eslint/brace-style": "off"
+    "@typescript-eslint/brace-style": "off",
+    "operator-linebreak": "off"
   }
 }

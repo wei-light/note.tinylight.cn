@@ -14,8 +14,8 @@ const App = ({ Component, pageProps }: CustomAppProps) => {
    * Example.getLayout = (page) => <div>{page}</div>
    */
   const getLayout = (
-    Component.getLayout
-    || (page => <LayoutWrapper>{page}</LayoutWrapper>)
+    Component.getLayout ||
+    (page => <LayoutWrapper>{page}</LayoutWrapper>)
   )
 
   return getLayout(<Component {...pageProps} />)

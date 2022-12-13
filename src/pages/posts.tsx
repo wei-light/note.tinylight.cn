@@ -23,8 +23,8 @@ const PostsPage = ({ postsList }: InferGetStaticPropsType<typeof getStaticProps>
                 {title}
               </h3>
             </AppLink>
-            {excerpt
-              && <p className="mt-2 opacity-[0.35]">{excerpt}</p>
+            {
+              excerpt && <p className="mt-2 opacity-[0.35]">{excerpt}</p>
             }
           </article>
         ))}

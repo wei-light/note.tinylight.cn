@@ -8,8 +8,8 @@ function resolveToc(
   headers: TOCItem[],
   levelsRange: number | [number, number] | 'deep' = 2,
 ) {
-  const levels: [number, number]
-    = typeof levelsRange === 'number'
+  const levels: [number, number] =
+    typeof levelsRange === 'number'
       ? [levelsRange, levelsRange]
       : levelsRange === 'deep'
         ? [2, 6]
