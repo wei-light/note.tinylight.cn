@@ -1,6 +1,5 @@
 import Image from 'next/image'
 import dayjs from 'dayjs'
-import AppLink from './AppLink'
 
 type Porps = {
   title: string
@@ -24,24 +23,12 @@ const ArticleHeader = ({ title, date, duration, cover }: Porps) => (
     <h2 className="mt-6 mb-4 text-3xl font-bold sm:text-4xl">
       {title}
     </h2>
-    <div className="flex items-center text-sm">
-      <AppLink href="https://github.com/wei-light">
-        <Image
-          alt="avatar"
-          src="/avatar.jpg"
-          width={24}
-          height={24}
-          quality={100}
-          className="rounded-full"
-        />
-      </AppLink>
-      <p className="space-x-1 ml-4 opacity-40">
-        <time dateTime={String(date)}>
-          {dayjs(date).format('MMMM DD, YYYY')}
-        </time>
-        <i>{'·'}</i>
-        <span>{duration}</span>
-      </p>
+    <div className="space-x-1 text-sm opacity-40">
+      <time dateTime={String(date)}>
+        {dayjs(date).format('MMMM DD, YYYY')}
+      </time>
+      <i>{'·'}</i>
+      <span>{duration}</span>
     </div>
   </section>
 )
