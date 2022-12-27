@@ -6,6 +6,30 @@ function removeFileSuffix(filePath: string) {
 }
 
 /**
+ * G:\Project\learn\test\project => [ 'G:', 'Project', 'learn', 'test', 'project' ]
+ * /usr/local/data => ['usr', 'local', 'data']
+ */
+function splitPath(filepath: string) {
+  return filepath.split(path.sep)
+}
+
+splitPath.reset = function (arg: string[]) {
+  return arg.join(path.sep)
+}
+
+function travel(dir: string, callback: (pathname: string) => void) {
+  fs.readdirSync(dir).forEach((file) => {
+    const pathname = path.join(dir, file)
+
+    if (fs.statSync(pathname).isDirectory()) {
+      travel(pathname, callback)
+    } else {
+      callback(pathname)
+    }
+  })
+}
+
+/**
  * @param folderPath Recursively get the path of all its sub files
  * @param options.relative The path is relative to the initial position
  * @returns Array of all child file paths
@@ -20,39 +44,14 @@ function getAllFilePathsDepth(folderPath: string, options = { relative: false })
   const prefixPath = folderPath
   const allPaths: string[] = []
 
-  function recursion(dirPath: string) {
-    const fileNames = fs.readdirSync(dirPath)
-
-    fileNames.forEach((fileName) => {
-      const fullPath = path.join(dirPath, fileName)
-      const stats = fs.statSync(fullPath)
-
-      if (stats.isFile()) {
-        const filePath = options.relative
-          ? path.relative(prefixPath, fullPath)
-          : fullPath
-        allPaths.push(filePath)
-      } else {
-        recursion(fullPath)
-      }
-    })
-  }
-
-  recursion(prefixPath)
+  travel(prefixPath, (fullPath) => {
+    const filePath = options.relative
+      ? path.relative(prefixPath, fullPath)
+      : fullPath
+    allPaths.push(filePath)
+  })
 
   return allPaths
-}
-
-/**
- * G:\Project\learn\test\project => [ 'G:', 'Project', 'learn', 'test', 'project' ]
- * /usr/local/data => ['usr', 'local', 'data']
- */
-function splitPath(filepath: string) {
-  return filepath.split(path.sep)
-}
-
-splitPath.reset = function (arg: string[]) {
-  return arg.join(path.sep)
 }
 
 export {
