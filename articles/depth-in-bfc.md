@@ -8,7 +8,7 @@ duration: 15min
 
 ## 什么是 BFC
 
-在开始解释 BFC 之前，我们先来了解一下在 CSS 2 中的几种[布局模式](https://w3c.github.io/csswg-drafts/css2/#positioning-scheme)。它们分别是：普通流（Normal flow），浮动（Float），绝对定位（Absolute positioning）。默认我们不对布局进行任何控制时，元素是处于普通流中的。而处于普通流中的元素将会从属于一种格式化上下文（Formatting context）。块级元素会参与块格式化上下文（BFC），行内元素会参与行内格式化上下文（IFC）。格式化上下文，可以简单理解为一块渲染区域，它内部有一套自己的渲染规则，而不同类型的格式化上下文会采用不同的渲染规则。
+在开始解释 BFC 之前，我们先来了解一下在 CSS 2 中的几种[定位方案](https://w3c.github.io/csswg-drafts/css2/#positioning-scheme)（positioning schemes）。它们分别是：普通流（Normal flow），浮动（Float），绝对定位（Absolute positioning）。默认我们不对布局进行任何控制时，元素是处于普通流中的。而处于普通流中的元素将会从属于一种格式化上下文（Formatting context）。块级元素会参与块格式化上下文（BFC），行内元素会参与行内格式化上下文（IFC）。格式化上下文，可以简单理解为一块渲染区域，它内部有一套自己的渲染规则，而不同类型的格式化上下文会采用不同的渲染规则。
 
 块格式化上下文（Block formatting context，简称 BFC），格式化上下文的一种。它也是一块独立的渲染区域，同时它有自己的规则来限制其内部元素如何进行布局。
 
