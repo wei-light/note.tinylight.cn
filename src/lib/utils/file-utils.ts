@@ -5,50 +5,51 @@ function removeFileSuffix(filePath: string) {
   return filePath.replace(path.extname(filePath), '')
 }
 
-/**
- * G:\Project\learn\test\project => [ 'G:', 'Project', 'learn', 'test', 'project' ]
- * /usr/local/data => ['usr', 'local', 'data']
- */
+// 'C:\\path\\dir\\file.txt' => ['C:', 'path', 'dir', 'file.txt']
+// '/usr/local/data/file.txt' => ['usr', 'local', 'data', 'file.txt]
 function splitPath(filepath: string) {
   return filepath.split(path.sep)
 }
-
-splitPath.reset = function (arg: string[]) {
-  return arg.join(path.sep)
+splitPath.reset = function (pathArray: string[]) {
+  return pathArray.join(path.sep)
 }
 
-function travel(dir: string, callback: (pathname: string) => void) {
+function travel(dir: string, callback: (filePath: string) => void) {
   fs.readdirSync(dir).forEach((file) => {
-    const pathname = path.join(dir, file)
+    const fullPath = path.join(dir, file)
 
-    if (fs.statSync(pathname).isDirectory()) {
-      travel(pathname, callback)
+    if (fs.statSync(fullPath).isDirectory()) {
+      travel(fullPath, callback)
     } else {
-      callback(pathname)
+      callback(fullPath)
     }
   })
 }
 
 /**
- * @param folderPath Recursively get the path of all its sub files
- * @param options.relative The path is relative to the initial position
- * @returns Array of all child file paths
  *
- * Example:
- * folderPath is 'G:\blog\articles', sub file: a.mdx, b.mdx, c\d.mdx
- * it will return ['G:\blog\articles\a.mdx', 'G:\blog\articles\b.mdx', 'G:\blog\articles\c\d.mdx']
- * if `options.relative` is true
- * it wil return ['a.mdx', 'b.mdx', 'c\d.mdx']
+ * Returns an array of all sub file paths for the given folder,
+ * support return absolute path or relative path
+ *
+ * C:\project
+ * │   a.txt
+ * │   b.txt
+ * │
+ * └───dir
+ *        c.txt
+ *
+ * Default: ['C:\\project\\a.txt', 'C:\\project\\b.txt', 'C:\\project\\dir\\c.txt']
+ * If `options.relative` is true: ['a.txt', 'b.txt', 'dir\\c.txt']
  */
 function getAllFilePathsDepth(folderPath: string, options = { relative: false }) {
-  const prefixPath = folderPath
   const allPaths: string[] = []
 
-  travel(prefixPath, (fullPath) => {
-    const filePath = options.relative
-      ? path.relative(prefixPath, fullPath)
-      : fullPath
-    allPaths.push(filePath)
+  travel(folderPath, (filePath) => {
+    const pathname = options.relative
+      ? path.relative(folderPath, filePath)
+      : filePath
+
+    allPaths.push(pathname)
   })
 
   return allPaths
